@@ -1,44 +1,7 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 
 export const Container = styled.div``;
-
-export const Header = styled.header`
-  padding: 22px 0;
-`;
-
-export const HeaderContent = styled.div`
-  max-width: 1120px;
-  display: flex;
-  align-items: center;
-  margin: 0 auto;
-  flex-direction: row;
-  justify-content: space-between;
-
-  img {
-    height: 70px;
-    width: 120px;
-  }
-
-  div {
-    margin-left: 40px;
-    a {
-      text-decoration: none;
-      color: #2f2651;
-      margin-right: 80px;
-
-      &:hover {
-        opacity: 0.8;
-      }
-
-      strong {
-        font-weight: 300;
-        font-size: 20px;
-        font-style: italic;
-      }
-    }
-  }
-`;
 
 export const Content = styled.main`
   max-width: 1120px;
@@ -47,7 +10,18 @@ export const Content = styled.main`
   flex: 1;
 `;
 
-export const Form = styled.div`
+const appearFromRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+export const FormContainer = styled.div`
   background: rgba(201, 199, 210);
   border-radius: 8px;
   flex: 1;
@@ -71,8 +45,10 @@ export const Form = styled.div`
   }
 
   div {
-    width: 300px;
+    width: 400px;
     float: left;
+
+    animation: ${appearFromRight} 2s;
 
     form {
       margin: 60px 80px;
@@ -84,6 +60,12 @@ export const Form = styled.div`
         font-weight: 400;
         font-size: 20px;
         margin-bottom: 15px;
+        margin-top: 20px;
+      }
+
+      small {
+        font-size: 16px;
+        margin-top: 5px;
       }
 
       input {
@@ -96,7 +78,7 @@ export const Form = styled.div`
         text-align: center;
         color: #2f2651;
 
-        margin-bottom: 30px;
+        margin-bottom: 5px;
       }
 
       button {

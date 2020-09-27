@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Geocode from 'react-geocode';
 import * as Yup from 'yup';
 
-import logo from '../../assets/logo.png';
 import home from '../../assets/undraw_suburbs_8b83.svg';
-import { Container, Header, HeaderContent, Content, Form } from './styles';
+import api from '../../services/api';
+import Header from '../../component/Header';
+import { Container, Content, FormContainer } from './styles';
+
+const submitSchema = Yup.object().shape({
+  cep: Yup.string().required('CEP da residência é obrigatório.'),
+  number: Yup.number()
+    .required('O número da residência é obrigatório.')
+    .min(1, 'O número da residência é obrigatório.'),
+  lat: Yup.string().required('A latitude da residência é obrigatória.'),
+  long: Yup.string().required('A longitude da residência é obrigatória.'),
+  residents: Yup.number()
+    .required('O número de residentes é obrigatório.')
+    .min(1, 'O número de residentes é obrigatório.'),
+});
 
 function AddResidence() {
   const [cep, setCep] = useState('');
@@ -14,6 +26,8 @@ function AddResidence() {
 
   const [number, setNumber] = useState(0);
   const [residents, setResidents] = useState(0);
+
+  const [schemaErrors, setSchemaErrors] = useState([]);
 
   useEffect(() => {
     Geocode.setApiKey('AIzaSyDo-7ru43sOH2dwJGWlSzHLh6L0aq1WPvM');
@@ -37,14 +51,8 @@ function AddResidence() {
     );
   }
 
-  function handleSubmit() {
-    const submitSchema = Yup.object().shape({
-      cep: Yup.string().required(),
-      number: Yup.number().required().integer(),
-      lat: Yup.string().required(),
-      long: Yup.string().required(),
-      residents: Yup.number().required().integer(),
-    });
+  async function handleSubmit(e) {
+    e.preventDefault();
 
     const submitFormData = {
       cep,
@@ -54,86 +62,109 @@ function AddResidence() {
       residents,
     };
 
-    submitSchema.isValid(submitFormData).then((valid) => {
-      console.log(valid);
-    });
+    await submitSchema
+      .validate(submitFormData, { abortEarly: false })
+      .then((value) => console.log(value))
+      .catch((errors) => {
+        let data = [];
+        const schemaErrors = errors.inner.map((err) => {
+          data.push({
+            field: err.path,
+            message: err.message,
+          });
+          return { field: err.path, message: err.message };
+        });
+
+        setSchemaErrors(data);
+      });
+
+    const response = await api.post('/residences', submitFormData);
+
+    if (response.data) {
+      window.location.reload();
+    }
   }
 
   return (
     <Container>
-      <Header>
-        <HeaderContent>
-          <img src={logo} alt="Suntech" />
-
-          <div>
-            <Link to="/">
-              <strong>Residências</strong>
-            </Link>
-            <Link to="/map">
-              <strong>Mapa de calor</strong>
-            </Link>
-          </div>
-        </HeaderContent>
-      </Header>
+      <Header />
 
       <Content>
-        <Form>
+        <FormContainer>
           <h2>Cadastro de Residências</h2>
 
           <div>
-            <form>
-              <label>CEP:</label>
+            <form onSubmit={handleSubmit}>
+              <label>CEP</label>
               <input
-                type="text"
                 name="cep"
-                defaultValue={cep}
+                type="text"
                 placeholder="CEP da residência"
+                value={cep}
                 onChange={(e) => handleCep(e)}
               />
+              {schemaErrors.find((err) => err.field === 'cep') && (
+                <small>O CEP da residência é obrigatório.</small>
+              )}
 
-              <label>Número:</label>
+              <label>Número</label>
               <input
-                type="number"
                 name="number"
+                type="text"
                 placeholder="Número da residência"
+                value={number === 0 ? '' : number}
                 onChange={(e) => setNumber(e.target.value)}
               />
+              {schemaErrors.find((err) => err.field === 'number') && (
+                <small>O número da residência é obrigatório.</small>
+              )}
 
-              <label>Latitude:</label>
+              <label>Latitude</label>
               <input
-                type="text"
                 name="lat"
-                placeholder="Latitude"
-                defaultValue={lat}
-                disabled
-              />
-
-              <label>Longitude:</label>
-              <input
                 type="text"
-                name="long"
-                placeholder="Longitude"
-                defaultValue={long}
+                placeholder="Latitude"
+                value={lat}
                 disabled
               />
+              {schemaErrors.find((err) => err.field === 'lat') && (
+                <small>A latitude é obrigatória.</small>
+              )}
 
-              <label>Quantidade de Residentes:</label>
+              <label>Longitude</label>
               <input
-                type="number"
+                name="long"
+                type="text"
+                placeholder="Longitude"
+                value={long}
+                disabled
+              />
+              {schemaErrors.find((err) => err.field === 'long') && (
+                <small>A longitude é obrigatória.</small>
+              )}
+
+              <label>Quantidade de Residentes</label>
+              <input
                 name="residents"
+                type="text"
                 placeholder="Quantidade de Residentes"
+                value={residents === 0 ? '' : residents}
                 onChange={(e) => setResidents(e.target.value)}
               />
-              <button type="button" onClick={() => handleSubmit()}>
-                Cadastrar
-              </button>
+              {schemaErrors.find((err) => err.field === 'residents') && (
+                <small>O número de residentes é obrigatório.</small>
+              )}
+
+              <div>
+                <button type="submit">Cadastrar</button>
+              </div>
             </form>
           </div>
 
           <div className="img">
             <img src={home} alt="Residências" />
           </div>
-        </Form>
+        </FormContainer>
       </Content>
     </Container>
   );
