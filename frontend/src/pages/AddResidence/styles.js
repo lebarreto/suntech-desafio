@@ -5,7 +5,7 @@ export const Container = styled.div``;
 
 export const Content = styled.main`
   max-width: 1120px;
-  margin: 44px auto;
+  margin: 0 auto;
   display: flex;
   flex: 1;
 `;
@@ -28,7 +28,6 @@ export const FormContainer = styled.div`
   align-items: center;
   padding-top: 20px;
   box-shadow: 1px 1px rgba(201, 199, 210, 0.6);
-  width: 100%;
 
   h2 {
     color: #2f2651;
@@ -37,7 +36,7 @@ export const FormContainer = styled.div`
 
   div.img {
     float: right;
-    margin-right: 300px;
+    margin-right: 320px;
     img {
       height: 700px;
       max-width: 500px;

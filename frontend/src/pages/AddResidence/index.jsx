@@ -67,7 +67,7 @@ function AddResidence() {
       .then((value) => console.log(value))
       .catch((errors) => {
         let data = [];
-        const schemaErrors = errors.inner.map((err) => {
+        errors.inner.map((err) => {
           data.push({
             field: err.path,
             message: err.message,

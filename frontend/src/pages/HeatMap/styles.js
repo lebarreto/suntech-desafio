@@ -4,9 +4,7 @@ export const Container = styled.div``;
 
 export const Content = styled.main`
   max-width: 1120px;
-  margin: 44px auto;
-  display: flex;
-  flex: 1;
+  margin: 0 auto;
 `;
 
 export const MapContainer = styled.div`
