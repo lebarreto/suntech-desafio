@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="#rocket-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-instalação-e-execução-do-frontend">Instalação e execução do Frontend</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-instalação-e-execução-do-frontend">Instalação e execução do Frontend</a>&nbsp;&nbsp;&nbsp;
 </p>
 
 ## :rocket: Tecnologias
