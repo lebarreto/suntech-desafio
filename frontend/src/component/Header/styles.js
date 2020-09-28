@@ -14,6 +14,17 @@ export const HeaderContent = styled.div`
   flex-direction: row;
   justify-content: space-between;
 
+  @media screen and (max-width: 500px) {
+    div a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+    div {
+      float: none;
+    }
+  }
+
   img {
     height: 70px;
     width: 120px;
