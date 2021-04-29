@@ -1,5 +1,5 @@
 <h3 align="center">
-  Suntech - Desafio Técnico
+  Heating Map
 </h3>
 
 <p align="center">
